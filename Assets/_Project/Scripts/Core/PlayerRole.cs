@@ -1,6 +1,6 @@
 namespace ProjectAllUnits.Core
 {
-    /// <summary>The two sides of the asymmetric game.</summary>
+    /// <summary>The two possible player roles.</summary>
     public enum PlayerRole : byte
     {
         Dispatcher = 0,
