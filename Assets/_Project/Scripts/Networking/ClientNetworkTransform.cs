@@ -3,11 +3,7 @@ using UnityEngine;
 
 namespace ProjectAllUnits.Networking
 {
-    /// <summary>
-    /// Owner-authoritative NetworkTransform: the owning client moves its own body
-    /// and the result is replicated to everyone else. Responsive, and what most
-    /// co-op games (Lethal Company included) do for player movement.
-    /// </summary>
+    /// <summary>NetworkTransform where the owning client, not the server, has authority.</summary>
     [DisallowMultipleComponent]
     public class ClientNetworkTransform : NetworkTransform
     {

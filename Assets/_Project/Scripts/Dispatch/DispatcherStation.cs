@@ -3,12 +3,7 @@ using UnityEngine;
 
 namespace ProjectAllUnits.Dispatch
 {
-    /// <summary>
-    /// The dispatcher's player object. Seated at the desk: no walking, mouse is free
-    /// for the UI. Step 2 grows this into calls, lookups, the map and camera feeds.
-    /// Prefab: NetworkObject + this, with a child Camera framing the desk monitors
-    /// and a child Canvas (deskUI) for the dispatch screens.
-    /// </summary>
+    /// <summary>The dispatcher's seated player object, showing the desk camera and UI to its owner.</summary>
     public class DispatcherStation : NetworkBehaviour
     {
         [SerializeField] Camera deskCamera;

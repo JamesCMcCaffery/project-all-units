@@ -4,10 +4,7 @@ using UnityEngine;
 
 namespace ProjectAllUnits.Networking
 {
-    /// <summary>
-    /// Throwaway debug menu for step 1: Host / Join by IP using Unity Transport.
-    /// Replaced by Steam lobbies (Facepunch transport) later.
-    /// </summary>
+    /// <summary>Temporary host/join-by-IP menu, to be replaced by Steam lobbies.</summary>
     public class ConnectionMenu : MonoBehaviour
     {
         string address = "127.0.0.1";

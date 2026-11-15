@@ -4,11 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace ProjectAllUnits.Officer
 {
-    /// <summary>
-    /// First-person officer movement. Owner-driven; pair with ClientNetworkTransform.
-    /// Prefab: CharacterController + NetworkObject + ClientNetworkTransform + this,
-    /// with a child Camera (assigned to playerCamera) at eye height.
-    /// </summary>
+    /// <summary>Owner-driven first-person movement for officers.</summary>
     [RequireComponent(typeof(CharacterController))]
     public class OfficerController : NetworkBehaviour
     {
@@ -26,7 +22,6 @@ namespace ProjectAllUnits.Officer
 
         public override void OnNetworkSpawn()
         {
-            // Only the local player's camera renders; remote officers are just bodies.
             playerCamera.gameObject.SetActive(IsOwner);
             if (IsOwner) Cursor.lockState = CursorLockMode.Locked;
         }
@@ -34,33 +29,42 @@ namespace ProjectAllUnits.Officer
         void Update()
         {
             if (!IsOwner) return;
-            var kb = Keyboard.current;
+            var keyboard = Keyboard.current;
             var mouse = Mouse.current;
-            if (kb == null || mouse == null) return;
+            if (keyboard == null || mouse == null) return;
 
-            if (kb.escapeKey.wasPressedThisFrame)
-                Cursor.lockState = Cursor.lockState == CursorLockMode.Locked
-                    ? CursorLockMode.None : CursorLockMode.Locked;
+            if (keyboard.escapeKey.wasPressedThisFrame) ToggleCursorLock();
+            if (Cursor.lockState == CursorLockMode.Locked) Look(mouse);
+            Move(keyboard);
+        }
 
-            // Look
-            if (Cursor.lockState == CursorLockMode.Locked)
-            {
-                Vector2 look = mouse.delta.ReadValue() * lookSensitivity;
-                transform.Rotate(0f, look.x, 0f);
-                pitch = Mathf.Clamp(pitch - look.y, -85f, 85f);
-                playerCamera.transform.localEulerAngles = new Vector3(pitch, 0f, 0f);
-            }
+        void ToggleCursorLock()
+        {
+            Cursor.lockState = Cursor.lockState == CursorLockMode.Locked
+                ? CursorLockMode.None
+                : CursorLockMode.Locked;
+        }
 
-            // Move
+        void Look(Mouse mouse)
+        {
+            Vector2 delta = mouse.delta.ReadValue() * lookSensitivity;
+            transform.Rotate(0f, delta.x, 0f);
+            pitch = Mathf.Clamp(pitch - delta.y, -85f, 85f);
+            playerCamera.transform.localEulerAngles = new Vector3(pitch, 0f, 0f);
+        }
+
+        void Move(Keyboard keyboard)
+        {
             Vector2 input = new(
-                (kb.dKey.isPressed ? 1 : 0) - (kb.aKey.isPressed ? 1 : 0),
-                (kb.wKey.isPressed ? 1 : 0) - (kb.sKey.isPressed ? 1 : 0));
-            float speed = kb.leftShiftKey.isPressed ? sprintSpeed : walkSpeed;
-            Vector3 move = (transform.right * input.x + transform.forward * input.y).normalized * speed;
+                (keyboard.dKey.isPressed ? 1 : 0) - (keyboard.aKey.isPressed ? 1 : 0),
+                (keyboard.wKey.isPressed ? 1 : 0) - (keyboard.sKey.isPressed ? 1 : 0));
+            float speed = keyboard.leftShiftKey.isPressed ? sprintSpeed : walkSpeed;
+            Vector3 velocity = (transform.right * input.x + transform.forward * input.y).normalized * speed;
 
+            // A small constant downward pull keeps isGrounded reliable on slopes and steps.
             verticalVelocity = body.isGrounded ? -1f : verticalVelocity + gravity * Time.deltaTime;
-            move.y = verticalVelocity;
-            body.Move(move * Time.deltaTime);
+            velocity.y = verticalVelocity;
+            body.Move(velocity * Time.deltaTime);
         }
     }
 }

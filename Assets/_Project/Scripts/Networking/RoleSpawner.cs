@@ -5,13 +5,7 @@ using UnityEngine;
 
 namespace ProjectAllUnits.Networking
 {
-    /// <summary>
-    /// Server-side: the first player to join becomes the Dispatcher, everyone
-    /// after is an Officer. Spawns the matching prefab as that client's player object.
-    ///
-    /// Setup: on the NetworkManager, leave "Player Prefab" EMPTY. Put both prefabs
-    /// in the Network Prefabs list instead.
-    /// </summary>
+    /// <summary>Spawns the first player to join as the Dispatcher and everyone after as an Officer.</summary>
     public class RoleSpawner : MonoBehaviour
     {
         [SerializeField] NetworkObject dispatcherPrefab;

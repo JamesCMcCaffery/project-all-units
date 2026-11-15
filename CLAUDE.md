@@ -1,0 +1,10 @@
+# PROJECT ALL UNITS
+
+Unity 6 LTS, URP, Netcode for GameObjects. See README.md for stack, roadmap and setup.
+
+## Code style
+- Comments are minimal, following common C# industry practice:
+  - One or two sentences of `/// <summary>` per class. No setup instructions, roadmap notes or rationale essays in code; those belong in the README or PR description.
+  - Code should be self-documenting: clear names and small, well-named methods instead of `// Look`, `// Move` style section comments.
+  - Inline comments only where the code is genuinely hard to follow or does something non-obvious (a workaround, a networking subtlety, a magic number).
+- Namespaces mirror folders under `Assets/_Project/Scripts` (`ProjectAllUnits.<Folder>`).
