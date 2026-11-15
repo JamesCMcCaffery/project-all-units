@@ -1,0 +1,10 @@
+{
+    "name": "ProjectAllUnits",
+    "rootNamespace": "ProjectAllUnits",
+    "references": [
+        "Unity.Netcode.Runtime",
+        "Unity.Networking.Transport",
+        "Unity.InputSystem"
+    ],
+    "autoReferenced": true
+}
