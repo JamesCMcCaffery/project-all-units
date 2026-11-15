@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using ProjectAllUnits.Core;
+using ProjectAllUnits.Player;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace ProjectAllUnits.Networking
 {
-    /// <summary>Spawns the first player to join as the Dispatcher and everyone after as an Officer.</summary>
+    /// <summary>Spawns each joining player and assigns the first as Dispatcher and the rest as Officers.</summary>
     public class RoleSpawner : MonoBehaviour
     {
-        [SerializeField] NetworkObject dispatcherPrefab;
-        [SerializeField] NetworkObject officerPrefab;
-        [SerializeField] Transform dispatchDeskSpawn;
+        [SerializeField] NetworkObject playerPrefab;
+        [SerializeField] Transform dispatchRoomSpawn;
         [SerializeField] Transform[] officerSpawns;
 
         readonly Dictionary<ulong, PlayerRole> roles = new();
@@ -48,23 +48,10 @@ namespace ProjectAllUnits.Networking
             if (role == PlayerRole.Dispatcher) dispatcherTaken = true;
             roles[clientId] = role;
 
-            NetworkObject prefab;
-            Transform spawn;
-            if (role == PlayerRole.Dispatcher)
-            {
-                prefab = dispatcherPrefab;
-                spawn = dispatchDeskSpawn;
-            }
-            else
-            {
-                prefab = officerPrefab;
-                spawn = officerSpawns.Length > 0
-                    ? officerSpawns[nextOfficerSpawn++ % officerSpawns.Length]
-                    : transform;
-            }
-
-            var instance = Instantiate(prefab, spawn.position, spawn.rotation);
-            instance.SpawnAsPlayerObject(clientId, destroyWithScene: true);
+            Transform spawn = SpawnPointFor(role);
+            var player = Instantiate(playerPrefab, spawn.position, spawn.rotation);
+            player.SpawnAsPlayerObject(clientId, destroyWithScene: true);
+            player.GetComponent<PlayerRoleState>().AssignRole(role);
             Debug.Log($"[RoleSpawner] Client {clientId} joined as {role}");
         }
 
@@ -73,6 +60,13 @@ namespace ProjectAllUnits.Networking
             if (roles.TryGetValue(clientId, out var role) && role == PlayerRole.Dispatcher)
                 dispatcherTaken = false;
             roles.Remove(clientId);
+        }
+
+        Transform SpawnPointFor(PlayerRole role)
+        {
+            if (role == PlayerRole.Dispatcher) return dispatchRoomSpawn;
+            if (officerSpawns.Length == 0) return transform;
+            return officerSpawns[nextOfficerSpawn++ % officerSpawns.Length];
         }
     }
 }

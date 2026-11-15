@@ -2,11 +2,11 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace ProjectAllUnits.Officer
+namespace ProjectAllUnits.Player
 {
-    /// <summary>Owner-driven first-person movement for officers.</summary>
+    /// <summary>First-person walking and looking, shared by every role.</summary>
     [RequireComponent(typeof(CharacterController))]
-    public class OfficerController : NetworkBehaviour
+    public class PlayerController : NetworkBehaviour
     {
         [SerializeField] Camera playerCamera;
         [SerializeField] float walkSpeed = 4f;
@@ -17,6 +17,9 @@ namespace ProjectAllUnits.Officer
         CharacterController body;
         float pitch;
         float verticalVelocity;
+
+        public Camera Camera => playerCamera;
+        public bool IsSeated { get; private set; }
 
         void Awake() => body = GetComponent<CharacterController>();
 
@@ -35,7 +38,22 @@ namespace ProjectAllUnits.Officer
 
             if (keyboard.escapeKey.wasPressedThisFrame) ToggleCursorLock();
             if (Cursor.lockState == CursorLockMode.Locked) Look(mouse);
-            Move(keyboard);
+            if (!IsSeated) Move(keyboard);
+        }
+
+        public void SitAt(Transform seatPoint)
+        {
+            IsSeated = true;
+            body.enabled = false;
+            transform.SetPositionAndRotation(seatPoint.position, seatPoint.rotation);
+            pitch = 0f;
+        }
+
+        public void StandUp(Transform standPoint)
+        {
+            transform.SetPositionAndRotation(standPoint.position, standPoint.rotation);
+            body.enabled = true;
+            IsSeated = false;
         }
 
         void ToggleCursorLock()
