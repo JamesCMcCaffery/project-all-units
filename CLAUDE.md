@@ -10,7 +10,7 @@ Unity 6 LTS, URP, Netcode for GameObjects. See README.md for stack, roadmap and 
 - Namespaces mirror folders under `Assets/_Project/Scripts` (`ProjectAllUnits.<Folder>`).
 
 ## Owned assets (use these before writing or buying alternatives)
-Paid, imported from the Asset Store into their own folders under `Assets/` (not `_Project`):
+Paid, imported from the Asset Store into their own folders under `Assets/` (not `_Project`). Not committed to git (size and licence); re-import from Package Manager > My Assets on a fresh clone:
 - **Dissonance Voice Chat**: all voice and radio.
 - **NWH Vehicle Physics 2**: all driveable vehicles.
 - **DOTween Pro**: tweens and UI motion.
