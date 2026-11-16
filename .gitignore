@@ -137,5 +137,21 @@ crashlytics-build.properties
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
+# Paid Asset Store packs (licence + size). Re-import from Package Manager > My Assets.
+/[Aa]ssets/[Ss]ynty/
+/[Aa]ssets/[Ss]ynty.meta
+/[Aa]ssets/[Pp]olygon*/
+/[Aa]ssets/[Pp]olygon*.meta
+/[Aa]ssets/NWH/
+/[Aa]ssets/NWH.meta
+/[Aa]ssets/[Ff]eel/
+/[Aa]ssets/[Ff]eel.meta
+/[Aa]ssets/[Pp]lugins/[Dd]issonance/
+/[Aa]ssets/[Pp]lugins/[Dd]issonance.meta
+/[Aa]ssets/[Dd]issonance/
+/[Aa]ssets/[Dd]issonance.meta
+/[Aa]ssets/[Pp]lugins/[Dd]emigiant/
+/[Aa]ssets/[Pp]lugins/[Dd]emigiant.meta
+
 # Rider / JetBrains IDE settings
 .idea/

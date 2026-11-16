@@ -1,0 +1,12 @@
+{
+    "name": "ProjectAllUnits.Editor",
+    "rootNamespace": "ProjectAllUnits.Editor",
+    "references": [
+        "Unity.RenderPipelines.Core.Runtime",
+        "Unity.RenderPipelines.Universal.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "autoReferenced": false
+}
