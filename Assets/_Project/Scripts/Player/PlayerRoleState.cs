@@ -1,3 +1,4 @@
+using System;
 using ProjectAllUnits.Core;
 using Unity.Netcode;
 
@@ -9,10 +10,16 @@ namespace ProjectAllUnits.Player
         readonly NetworkVariable<PlayerRole> role = new(PlayerRole.Officer);
 
         public PlayerRole Role => role.Value;
+        public event Action<PlayerRole> RoleChanged;
+
+        public override void OnNetworkSpawn() => role.OnValueChanged += OnRoleValueChanged;
+        public override void OnNetworkDespawn() => role.OnValueChanged -= OnRoleValueChanged;
 
         public void AssignRole(PlayerRole newRole)
         {
             if (IsServer) role.Value = newRole;
         }
+
+        void OnRoleValueChanged(PlayerRole previous, PlayerRole current) => RoleChanged?.Invoke(current);
     }
 }
