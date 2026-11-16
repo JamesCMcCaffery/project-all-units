@@ -152,3 +152,6 @@ crashlytics-build.properties
 /[Aa]ssets/[Dd]issonance.meta
 /[Aa]ssets/[Pp]lugins/[Dd]emigiant/
 /[Aa]ssets/[Pp]lugins/[Dd]emigiant.meta
+
+# Rider / JetBrains IDE settings
+.idea/
