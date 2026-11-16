@@ -20,7 +20,6 @@ namespace ProjectAllUnits.Player
         void Update()
         {
             if (!IsOwner) return;
-
             Target = currentSeat == null ? FindTarget() : null;
 
             if (Keyboard.current == null || !Keyboard.current.eKey.wasPressedThisFrame) return;
@@ -34,7 +33,8 @@ namespace ProjectAllUnits.Player
         IInteractable FindTarget()
         {
             Transform eye = controller.Camera.transform;
-            if (!Physics.Raycast(eye.position, eye.forward, out RaycastHit hit, reach, interactableLayers))
+            var raycastCollided = Physics.Raycast(eye.position, eye.forward, out RaycastHit hit, reach, interactableLayers);
+            if (!raycastCollided)
                 return null;
             return hit.collider.GetComponentInParent<IInteractable>();
         }
