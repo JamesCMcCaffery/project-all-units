@@ -1,11 +1,25 @@
 # PROJECT ALL UNITS
 
-Asymmetric co-op police game for PC (Steam): one Dispatcher, the rest Officers. Unity 6 LTS (6000.0.85f2), URP, Netcode for GameObjects (host-client). README.md has the stack, roadmap, setup and the current step's editor checklist; keep it up to date when a step changes.
+Asymmetric co-op police game for PC (Steam): one Dispatcher, the rest Officers. Unity 6 LTS (6000.0.85f2), URP, Netcode for GameObjects (host-client; Unity Transport now, Unity Relay for early online tests, Facepunch.Steamworks lobbies later), Dissonance for voice and radio. README.md has the stack, roadmap, setup and the current step's editor checklist; keep it up to date when a step changes.
 
 ## Working with James
 - James is new to Unity (ex-Roblox, knows C#, uses Rider). He does editor work himself: explain editor steps as short numbered lists with exact menu paths, and use Roblox analogies where they help.
 - Write C# and editor tooling; don't hand-edit `.unity`, `.prefab` or `.asset` YAML unless there is no other way. Prefer an editor script under `Scripts/Editor` (menu: *Tools > Project All Units*) for repeatable scene setup.
 - Scripts are not compiled in CI. After code changes, ask James to check the Unity Console for red errors.
+
+## Roadmap (one-call vertical slice)
+1. Foundations: greybox street, shared first-person player, sitting, Dispatcher/Officer spawning over the network. **Done.**
+1.5. First look: Synty art in the dispatch room and one street corner, characters, lighting and post. **Current.**
+2. Dispatcher desk MVP: incoming call, plate/licence lookup, map with units, assign + waypoint, one CCTV and one bodycam feed.
+3. Officer field MVP: push-to-talk radio, driveable car, fleeing suspect NPC, taser, handcuffs.
+4. The full call start to finish (stolen vehicle), playtest, plan the next slice.
+
+Keep work scoped to the current step unless asked.
+
+## Art style
+Stylised, colourful but grounded: between clean low-poly and semi-realistic. Reference: *RV There Yet?* Not realistic, not cartoony-crazy. James finds greyboxes hard to read, so get real models in early.
+
+Synty POLYGON packs are for prototyping. Before the Steam page: palette recolour, a signature shader/post look, and custom hero assets (officer, police car, dispatch desk and screens, UI).
 
 ## Architecture
 - Everyone uses one shared first-person `Player` prefab. Roles differ by spawn point and what they can do; role-specific features hang off the shared player, never a separate controller.
