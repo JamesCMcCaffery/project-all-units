@@ -3,9 +3,12 @@
 Asymmetric co-op police game for PC (Steam): one Dispatcher, the rest Officers. Unity 6 LTS (6000.0.85f2), URP, Netcode for GameObjects (host-client; Unity Transport now, Unity Relay for early online tests, Facepunch.Steamworks lobbies later), Dissonance for voice and radio. README.md has the stack, roadmap, setup and the current step's editor checklist; keep it up to date when a step changes.
 
 ## Working with James
-- James is new to Unity (ex-Roblox, knows C#, uses Rider). He does editor work himself: explain editor steps as short numbered lists with exact menu paths, and use Roblox analogies where they help.
-- Write C# and editor tooling; don't hand-edit `.unity`, `.prefab` or `.asset` YAML unless there is no other way. Prefer an editor script under `Scripts/Editor` (menu: *Tools > Project All Units*) for repeatable scene setup.
-- Scripts are not compiled in CI. After code changes, ask James to check the Unity Console for red errors.
+James is new to Unity (ex-Roblox, knows C#, uses Rider). Keep his part as small as possible: if you can do something yourself, do it.
+- **Do it yourself:** C#, editor tooling, project settings, packages (`Packages/manifest.json`), README/CLAUDE.md, and git (branch, commit, push, PR).
+- **Scene and prefab setup:** write an idempotent editor menu tool under *Tools > Project All Units* (`Scripts/Editor`, see `FirstLookSetup.cs`) that builds and wires everything, so James clicks one menu item instead of following a checklist. Only hand-edit `.unity` / `.prefab` / `.asset` YAML for trivial changes.
+- **Run it yourself when the editor is closed:** `"<Unity Hub>/Editor/6000.0.85f2/Editor/Unity.exe" -batchmode -quit -projectPath . -executeMethod <Class.Method> -logFile -`. Batch mode can't open the project while the editor has it open; then ask James to click the menu item instead.
+- **Check compile errors yourself** in `%LOCALAPPDATA%\Unity\Editor\Editor.log` rather than asking James to look at the Console.
+- **Only hand James what needs him:** pressing Play and judging how it feels or looks, Asset Store downloads/imports, and anything needing the open editor. Give the fewest steps, exact menu paths, no explanation unless he asks. A Roblox analogy is fine when he's learning a concept.
 
 ## Roadmap (one-call vertical slice)
 1. Foundations: greybox street, shared first-person player, sitting, Dispatcher/Officer spawning over the network. **Done.**
