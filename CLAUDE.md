@@ -1,6 +1,31 @@
 # PROJECT ALL UNITS
 
-Unity 6 LTS, URP, Netcode for GameObjects. See README.md for stack, roadmap and setup.
+Asymmetric co-op police game for PC (Steam): one Dispatcher, the rest Officers. Unity 6 LTS (6000.0.85f2), URP, Netcode for GameObjects (host-client). README.md has the stack, roadmap, setup and the current step's editor checklist; keep it up to date when a step changes.
+
+## Working with James
+- James is new to Unity (ex-Roblox, knows C#, uses Rider). He does editor work himself: explain editor steps as short numbered lists with exact menu paths, and use Roblox analogies where they help.
+- Write C# and editor tooling; don't hand-edit `.unity`, `.prefab` or `.asset` YAML unless there is no other way. Prefer an editor script under `Scripts/Editor` (menu: *Tools > Project All Units*) for repeatable scene setup.
+- Scripts are not compiled in CI. After code changes, ask James to check the Unity Console for red errors.
+
+## Architecture
+- Everyone uses one shared first-person `Player` prefab. Roles differ by spawn point and what they can do; role-specific features hang off the shared player, never a separate controller.
+- `RoleSpawner` spawns players (first = Dispatcher, rest = Officers) and sets `PlayerRoleState` (server-written NetworkVariable, `RoleChanged` event for clients).
+- Movement is owner-authoritative via `ClientNetworkTransform`. Visual-only things (animation, which model shows) are derived locally on each client, not synced.
+- Interactables implement `IInteractable`; `Seat` and `DispatchDesk : Seat` are the examples. Keep the gameplay object and swap only its visual child when dressing with art.
+
+## Repo layout
+- Our code and content: `Assets/_Project/{Scripts,Prefabs,Scenes,Art,Audio,Settings}`. Main scene: `Scenes/Greybox.unity`. URP asset and renderer: `_Project/Settings`.
+- Runtime asmdef `ProjectAllUnits` in `Scripts/`; editor-only asmdef `ProjectAllUnits.Editor` in `Scripts/Editor/`.
+
+## Git
+- Always commit `.meta` files alongside their assets and scripts (missing metas break references on other machines).
+- Never commit the paid asset folders (`Assets/Synty`, NWH, Feel, Dissonance, `Plugins/Demigiant`); they are gitignored. If `git status` shows them, fix `.gitignore` rather than committing.
+- Art, audio and models go through Git LFS (`.gitattributes`).
+
+## Gotchas
+- Multiplayer Play Mode virtual players load scenes from disk: save (Ctrl+S) before pressing Play. If a virtual player throws "Could not read file ... InternalAPIEditorBridge", close Unity and delete `Library/VP`.
+- Switching git branches with Unity open can delete or revert scenes underneath it; close Unity first.
+
 
 ## Code style
 - Comments are minimal, following common C# industry practice:
